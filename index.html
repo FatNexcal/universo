@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>❤️</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+background:linear-gradient(to bottom,#020617,#0f172a);
+font-family:Arial,Helvetica,sans-serif;
+color:#fff;
+overflow:hidden;
+}
+#stars{position:fixed;inset:0}
+.star{
+position:absolute;border-radius:50%;background:white;
+box-shadow:0 0 8px rgba(255,255,255,.8);
+animation:twinkle 4s infinite;
+}
+@keyframes twinkle{0%,100%{opacity:.2}50%{opacity:1}}
+.container{
+height:100vh;display:flex;justify-content:center;align-items:center;
+padding:24px;position:relative;z-index:2;
+}
+.card{
+max-width:700px;width:100%;text-align:center;
+backdrop-filter:blur(3px);
+animation:fade .5s ease;
+}
+.text{
+font-size:1.3rem;line-height:1.9;white-space:pre-line;
+min-height:300px;
+}
+button{
+padding:14px 30px;border:none;border-radius:999px;
+font-size:1rem;cursor:pointer;margin-top:24px;
+transition:.2s;
+}
+button:hover{transform:scale(1.05)}
+@keyframes fade{
+from{opacity:0;transform:translateY(15px)}
+to{opacity:1;transform:translateY(0)}
+}
+#hearts{position:fixed;inset:0;pointer-events:none;overflow:hidden}
+.heart{
+position:absolute;
+font-size:22px;
+animation:floatUp linear forwards;
+}
+@keyframes floatUp{
+from{transform:translateY(60px);opacity:0}
+15%{opacity:1}
+to{transform:translateY(-110vh);opacity:0}
+}
+.final-heart{
+display:block;
+font-size:2rem;
+margin-top:10px;
+animation:pulse 2s infinite;
+}
+@keyframes pulse{
+0%,100%{transform:scale(1)}
+50%{transform:scale(1.2)}
+}
+</style>
+</head>
+<body>
+
+<div id="stars"></div>
+
+<div class="container">
+<div class="card">
+<div id="texto" class="text"></div>
+<button id="btn">Continuar</button>
+</div>
+</div>
+
+<div id="hearts"></div>
+
+<script>
+const telas=[
+`AVISO
+
+Este site foi desenvolvido exclusivamente para uma pessoa.
+
+Se você não for a minha namorada,
+feche imediatamente.
+
+Caso contrário, continue por sua conta e risco.`,
+
+`Antes de qualquer coisa, eu queria que isso fosse maior.
+
+Queria fazer algo incrível, algo à altura do que você merece.
+
+Mas, por enquanto, tudo o que eu posso oferecer está aqui.
+
+Meu tempo, meu carinho e algumas palavras que eu passei horas tentando organizar.
+
+Então, mesmo sendo simples, espero que você goste.`,
+
+`Só mais um aviso antes de continuar.
+
+Eu não sou muito bom com palavras.
+
+Então, se alguma parte disso ficar estranha,
+a culpa é minha.
+
+Mas tudo o que está aqui é sincero.`,
+
+`Tem uma coisa engraçada sobre você.
+
+Você foi entrando na minha vida aos poucos.
+
+E em algum momento,
+sem eu perceber,
+
+virou uma das pessoas mais importantes,
+
+se não a mais importante da minha vida.`,
+
+`Quando acontece alguma coisa boa,
+eu quero te contar.
+
+Quando acontece alguma coisa ruim,
+eu quero o seu abraço.
+
+No fim das contas,
+independente do que aconteça,
+
+eu sempre acabo pensando em você.`,
+
+`Então cheguei a uma conclusão.
+
+Você tornou os meus dias melhores.
+
+E eu sou muito feliz por ter você na minha vida.
+
+❤️`];
+
+let atual=0;
+let digitando=false;
+let timer=null;
+
+const texto=document.getElementById("texto");
+const btn=document.getElementById("btn");
+
+function renderFinal(){
+texto.innerHTML=telas[atual].replace("❤️",'<span class="final-heart">❤️</span>');
+btn.style.display="none";
+iniciarCoracoes();
+}
+
+function escrever(textoCompleto){
+if(timer) clearInterval(timer);
+
+digitando=true;
+texto.innerHTML="";
+let i=0;
+
+timer=setInterval(()=>{
+if(i<textoCompleto.length){
+texto.innerHTML += textoCompleto[i]==="\n" ? "<br>" : textoCompleto[i];
+i++;
+}else{
+clearInterval(timer);
+digitando=false;
+}
+},20);
+
+btn.onclick=()=>{
+if(digitando){
+clearInterval(timer);
+texto.innerHTML=textoCompleto.replace(/\n/g,"<br>");
+digitando=false;
+return;
+}
+proxima();
+};
+}
+
+function mostrarTela(){
+document.querySelector(".card").style.animation="none";
+setTimeout(()=>{
+document.querySelector(".card").style.animation="fade .5s ease";
+},10);
+
+if(atual===telas.length-1){
+renderFinal();
+return;
+}
+
+escrever(telas[atual]);
+}
+
+function proxima(){
+atual++;
+mostrarTela();
+}
+
+function iniciarCoracoes(){
+if(window.heartsStarted) return;
+window.heartsStarted=true;
+
+setInterval(()=>{
+const h=document.createElement("div");
+h.className="heart";
+h.textContent="❤️";
+h.style.left=(5+Math.random()*90)+"%";
+h.style.bottom="-30px";
+h.style.animationDuration=(4+Math.random()*4)+"s";
+document.getElementById("hearts").appendChild(h);
+setTimeout(()=>h.remove(),8000);
+},450);
+}
+
+for(let i=0;i<180;i++){
+const s=document.createElement("div");
+s.className="star";
+const size=Math.random()*2.5+1;
+s.style.width=size+"px";
+s.style.height=size+"px";
+s.style.left=Math.random()*100+"%";
+s.style.top=Math.random()*100+"%";
+s.style.animationDelay=Math.random()*5+"s";
+document.getElementById("stars").appendChild(s);
+}
+
+mostrarTela();
+</script>
+</body>
+</html>
